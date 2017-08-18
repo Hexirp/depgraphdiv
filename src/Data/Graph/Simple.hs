@@ -12,7 +12,7 @@ module Data.Graph.Simple where
  type Adjacency a = (a, [a])
 
  -- | 'Adjagraph' is composed of a list of 'Adjacency'.
- type Adjagraph a = Adjagraph [Adjacency a]
+ newtype Adjagraph a = Adjagraph [Adjacency a]
 
  tsort :: Ord a => Graph a -> Adjagraph a
  tsort = undefined
