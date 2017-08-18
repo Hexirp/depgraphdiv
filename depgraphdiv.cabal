@@ -1,6 +1,6 @@
 name:                depgraphdiv
 version:             0.1.0.0
--- synopsis:
+synopsis:            Divide modules into packages according to the dependecy graph
 -- description:
 homepage:            https://github.com/Hexirp/depgraphdiv#readme
 license:             BSD3
@@ -8,14 +8,14 @@ license-file:        LICENSE
 author:              Hexirp
 maintainer:          Hexirp@users.noreply.github.com
 copyright:           2017 Hexirp
-category:            Other
+category:            Tools
 build-type:          Simple
 extra-source-files:  README.md
 cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Lib
+  exposed-modules:     Data.Graph.Simple
   build-depends:       base >= 4.7 && < 5
   default-language:    Haskell2010
 
