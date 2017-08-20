@@ -26,7 +26,7 @@ module Data.Graph.Simple where
   then showChar '(' . showsPrecEdge 0 (a, b) . showChar ')'
   else id
    . showsPrec (infix_edge + 1) a
-   . showString "=:>"
+   . showString " =:> "
    . showsPrec (infix_edge + 1) b where
     infix_edge :: Int
     infix_edge = 1
