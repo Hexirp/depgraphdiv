@@ -40,7 +40,7 @@ test-suite depgraphdiv-test
 test-suite depgraphdiv-doctest
   type:                exitcode-stdio-1.0
   hs-source-dirs:      doctest
-  main-is:             doctest-discover.hs
+  main-is:             doctest-driver.hs
   build-depends:       base
                      , depgraphdiv
                      , doctest
