@@ -32,6 +32,13 @@ module Data.Graph.Simple where
  -- | 'Graph' is composed of 'Edge's.
  newtype Graph a = Graph [Edge a]
 
+ -- | It's listlike.
+ --
+ -- >>> print $ Graph []
+ -- {}
+ --
+ -- >>> print $ Graph $ (0, 1) : (1, 2) : (2, 3) : []
+ -- {0 =:> 1, 1 =:> 2, 2 =:> 3}
  instance Show a => Show (Graph a) where
   showsPrec _ (Graph []) = showString "{}"
   showsPrec _ (Graph (x : xs)) = showChar '{' . go x xs where
