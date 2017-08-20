@@ -11,6 +11,17 @@ module Data.Graph.Simple where
 
  infix 1 =:>
 
+ -- | Show 'Edge' according to order of operations. It's 'showsPrec' for 'Edge'.
+ showsPrecEdge :: Show a => Int -> Edge a -> ShowS
+ showsPrecEdge i (a, b) = if i > 1
+  then showChar '(' . showsPrecEdge 0 (a, b) . showChar ')'
+  else id
+   . showsPrec (infix_edge + 1) a
+   . showString "=:>"
+   . showsPrec (infix_edge + 1) b where
+    infix_edge :: Int
+    infix_edge = 1
+
  -- | 'Graph' is composed of 'Edge's.
  newtype Graph a = Graph [Edge a]
 
