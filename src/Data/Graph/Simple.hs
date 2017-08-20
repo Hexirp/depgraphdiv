@@ -22,15 +22,21 @@ module Data.Graph.Simple where
  -- >>> showsPrecEdge 2 (3, 4) []
  -- "(3 =:> 4)"
  showsPrecEdge :: Show a => Int -> Edge a -> ShowS
- showsPrecEdge i (a, b) = showParen (i > infix_edge) $
+ showsPrecEdge i (x, y) = showParen (i > infix_edge) $
   id
-   . showsPrec (infix_edge + 1) a
+   . showsPrec (infix_edge + 1) x
    . showString " =:> "
-   . showsPrec (infix_edge + 1) b
+   . showsPrec (infix_edge + 1) y
     where infix_edge = 1
 
  -- | 'Graph' is composed of 'Edge's.
  newtype Graph a = Graph [Edge a]
+
+ instance Show a => Show (Graph a) where
+  showsPrec _ (Graph []) = showString "{}"
+  showsPrec _ (Graph (x : xs)) = showChar '{' . go x xs where
+   go x [] = showsPrecEdge 0 x . showChar '}'
+   go x (y : ys) = showsPrecEdge 0 x . showString ", " . go y ys
 
  -- | 'Adjacency' is composed of a vertex and a vertices referenced by it.
  type Adjacency a = (a, [a])
