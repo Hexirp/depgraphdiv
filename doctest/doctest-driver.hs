@@ -3,4 +3,4 @@
 import Test.DocTest
 
 main :: IO ()
-main = doctest ["src/Data/Graph/Simple.hs"]
+main = doctest ["-i/src"]
