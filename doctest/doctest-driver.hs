@@ -3,4 +3,4 @@
 import Test.DocTest
 
 main :: IO ()
-main = doctest ["-i/src"]
+main = doctest ["src", "app"]
