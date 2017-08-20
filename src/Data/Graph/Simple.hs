@@ -5,6 +5,12 @@ module Data.Graph.Simple where
  -- | 'Edge' is composed of a start vertex and an end vertex: @(start, end)@.
  type Edge a = (a, a)
 
+ -- | Make 'Edge'.
+ (=:>) :: a -> a -> Edge a
+ x =:> y = (x, y)
+
+ infix 1 =:>
+
  -- | 'Graph' is composed of 'Edge's.
  newtype Graph a = Graph [Edge a]
 
