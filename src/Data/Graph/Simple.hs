@@ -44,12 +44,3 @@ module Data.Graph.Simple where
   showsPrec _ (Graph (x : xs)) = showChar '{' . go x xs where
    go x [] = showsPrecEdge 0 x . showChar '}'
    go x (y : ys) = showsPrecEdge 0 x . showString ", " . go y ys
-
- -- | 'Adjacency' is composed of a vertex and a vertices referenced by it.
- type Adjacency a = (a, [a])
-
- -- | 'Adjagraph' is composed of a list of 'Adjacency'.
- newtype Adjagraph a = Adjagraph [Adjacency a]
-
- tsort :: Ord a => Graph a -> Adjagraph a
- tsort = undefined
