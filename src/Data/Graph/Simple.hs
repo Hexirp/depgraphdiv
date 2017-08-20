@@ -22,14 +22,12 @@ module Data.Graph.Simple where
  -- >>> showsPrecEdge 2 (3, 4) []
  -- "(3 =:> 4)"
  showsPrecEdge :: Show a => Int -> Edge a -> ShowS
- showsPrecEdge i (a, b) = if i > infix_edge
-  then showChar '(' . showsPrecEdge 0 (a, b) . showChar ')'
-  else id
+ showsPrecEdge i (a, b) = showParen (i > infix_edge) $
+  id
    . showsPrec (infix_edge + 1) a
    . showString " =:> "
-   . showsPrec (infix_edge + 1) b where
-    infix_edge :: Int
-    infix_edge = 1
+   . showsPrec (infix_edge + 1) b
+    where infix_edge = 1
 
  -- | 'Graph' is composed of 'Edge's.
  newtype Graph a = Graph [Edge a]
