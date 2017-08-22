@@ -24,8 +24,8 @@ module Data.Graph.Sort where
 
  -- | Delete references from a vertex in a graph.
  --
- -- >>> tsort_delete 1 [(0, []), (2, [1, 3]), (3, [])]
- -- [(0, []), (2, [3]), (3, [])]
+ -- >>> tsort_delete 1 [(0,[]),(2,[1,3]),(3,[])]
+ -- [(0,[]),(2,[3]),(3,[])]
  tsort_delete :: Eq a => a -> [(a, [a])] -> [(a, [a])]
  tsort_delete x = map_refs (delete x)
 
