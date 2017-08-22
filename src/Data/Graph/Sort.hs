@@ -1,6 +1,7 @@
 -- | Provide Topological sort for Adjacency list.
 module Data.Graph.Sort where
  import Prelude
+ import Data.List (sortOn)
 
  -- | Sort a graph. It's Topological sort.
  tsort :: Eq a => [(a, [a])] -> [(a, [a])]
@@ -14,7 +15,11 @@ module Data.Graph.Sort where
  -- >>> tsort_sort [(0, []), (1, [2, 3]), (2, [3]), (3, [])]
  -- [(0, []), (3, []), (2, [3]), (1, [2, 3])]
  tsort_sort :: Eq a => [(a, [a])] -> [(a, [a])]
- tsort_sort = undefined
+ tsort_sort = sortOn count_ref
+
+ -- | Count the number of vertices referring to a vertex.
+ count_ref :: (a, [a]) -> Int
+ count_ref (_, x) = length x
 
  -- | Delete references from a vertex in a graph.
  --
