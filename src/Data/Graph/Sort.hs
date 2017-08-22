@@ -12,8 +12,8 @@ module Data.Graph.Sort where
 
  -- | Sort a list of vertex in descending order of the number of vertices referenced.
  --
- -- >>> tsort_sort [(0, []), (1, [2, 3]), (2, [3]), (3, [])]
- -- [(0, []), (3, []), (2, [3]), (1, [2, 3])]
+ -- >>> tsort_sort [(0,[]),(1,[2,3]),(2,[3]),(3,[])]
+ -- [(0,[]),(3,[]),(2,[3]),(1,[2,3])]
  tsort_sort :: Eq a => [(a, [a])] -> [(a, [a])]
  tsort_sort = sortOn count_ref
 
