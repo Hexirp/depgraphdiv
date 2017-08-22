@@ -1,7 +1,8 @@
 -- | Provide Topological sort for Adjacency list.
 module Data.Graph.Sort where
  import Prelude
- import Data.List (sortOn)
+ import Data.List (sortOn, delete)
+ import Control.Arrow (second)
 
  -- | Sort a graph. It's Topological sort.
  tsort :: Eq a => [(a, [a])] -> [(a, [a])]
@@ -26,4 +27,8 @@ module Data.Graph.Sort where
  -- >>> tsort_delete 1 [(0, []), (2, [1, 3]), (3, [])]
  -- [(0, []), (2, [3]), (3, [])]
  tsort_delete :: Eq a => a -> [(a, [a])] -> [(a, [a])]
- tsort_delete = undefined
+ tsort_delete x = map_refs (delete x)
+
+ -- | Map a function to a list of reference.
+ map_refs :: ([a] -> [a]) -> [(a, [a])] -> [(a, [a])]
+ map_refs f = map (second f)
