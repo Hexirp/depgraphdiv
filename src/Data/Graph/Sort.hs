@@ -5,6 +5,9 @@ module Data.Graph.Sort where
  import Control.Arrow (second)
 
  -- | Sort a graph. It's Topological sort.
+ --
+ -- >>> tsort [(3,[1,2]),(2,[0]),(1,[0]),(0,[])]
+ -- [(0,[]),(2,[0]),(1,[0]),(3,[1,2])]
  tsort :: Eq a => [(a, [a])] -> [(a, [a])]
  tsort [] = []
  tsort (x : xs) = let (v, vs) = x in case vs of
