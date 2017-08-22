@@ -9,10 +9,12 @@ module Data.Graph.Sort where
  -- >>> tsort [(3,[1,2]),(2,[0]),(1,[0]),(0,[])]
  -- [(0,[]),(2,[0]),(1,[0]),(3,[1,2])]
  tsort :: Eq a => [(a, [a])] -> [(a, [a])]
- tsort [] = []
- tsort (x : xs) = let (v, vs) = x in case vs of
-  [] -> (v, []) : tsort (tsort_sort (tsort_delete v xs))
-  _ -> error "Found Loop"
+ tsort = go . tsort_sort where
+  go :: Eq x => [(x, [x])] -> [(x, [x])]
+  go [] = []
+  go (x : xs) = let (v, vs) = x in case vs of
+   [] -> (v, []) : (go $ tsort_sort $ tsort_delete v xs)
+   _ -> error "Found Loop"
 
  -- | Sort a list of vertex in descending order of the number of vertices referenced.
  --
