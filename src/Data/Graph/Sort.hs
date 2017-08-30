@@ -33,8 +33,8 @@ module Data.Graph.Sort where
 
  -- | Sort a list of vertex in descending order of the number of vertices referenced.
  --
- -- >>> tsort_sort [(0,[],[]),(1,[2,3],[]),(2,[3],[]),(3,[],[])]
- -- [(0,[],[]),(3,[],[]),(2,[3],[]),(1,[2,3],[])]
+ -- >>> tsort_sort [((0,[]),[]),((1,[2,3]),[]),((2,[3]),[]),((3,[]),[])]
+ -- [((0,[]),[]),((3,[]),[]),((2,[3]),[]),((1,[2,3]),[])]
  tsort_sort :: Eq a => [Mountain a t] -> [Mountain a t]
  tsort_sort = sortOn countRef
 
@@ -44,8 +44,8 @@ module Data.Graph.Sort where
 
  -- | Delete references from a vertex in a graph.
  --
- -- >>> tsort_delete 1 [(0,[],[]),(2,[1,3],[]),(3,[],[])]
- -- [(0,[],[]),(2,[3],[]),(3,[],[])]
+ -- >>> tsort_delete 1 [((0,[]),[]),((2,[1,3]),[]),((3,[]),[])]
+ -- [((0,[]),[]),((2,[3]),[]),((3,[]),[])]
  tsort_delete :: Eq a => a -> [Mountain a t] -> [Mountain a t]
  tsort_delete x = mapRefs $ delete x
 
