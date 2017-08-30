@@ -4,11 +4,14 @@ module Data.Graph.Sort where
  import Data.List (sortOn, delete)
  import Control.Arrow (first, second)
 
- -- | 'Pile' is composed of a vertex and vertices referring to it.
- type Pile v = (v, [v])
+ -- | 'Revadle' is a element of reversed adjacency list.
+ type Revadle v = (v, [v])
 
- -- | 'Mountain' is composed of 'Pile' and a tag.
- type Mountain v t = (Pile v, t)
+ -- | 'Revadl' is a reversed adjacency list.
+ type Revadl v = [Revadle v]
+
+ -- | 'Mountain' is composed of 'Revadle' and a tag.
+ type Mountain v t = (Revadle v, t)
 
  -- | 'Peak' is a vertex and a tag.
  type Peak v t = (v, t)
@@ -17,11 +20,11 @@ module Data.Graph.Sort where
  --
  -- >>> tsort [(3,[1,2]),(2,[0]),(1,[0]),(0,[])]
  -- [(0,[]),(2,[0]),(1,[0]),(3,[1,2])]
- tsort :: Eq a => [Pile a] -> [Pile a]
+ tsort :: Eq a => Revadl a -> Revadl a
  tsort = tsort_main . tsort_sort . map copyRef
 
  -- | Copy references to tags.
- copyRef :: Pile a -> Mountain a [a]
+ copyRef :: Revadle a -> Mountain a [a]
  copyRef (v, r) = ((v, r), r)
 
  -- | Main part of 'tsort'.
