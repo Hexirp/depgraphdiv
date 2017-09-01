@@ -7,6 +7,12 @@ module Data.Graph.Sort where
  -- | 'Revadle' is a element of reversed adjacency list.
  type Revadle v = (v, [v])
 
+ -- | Make 'Revadle'.
+ (<+) :: v -> [v] -> Revadle v
+ v <+ rs = (v, rs)
+
+ infix 3 <+
+
  -- | 'Revadl' is a reversed adjacency list.
  type Revadl v = [Revadle v]
 
