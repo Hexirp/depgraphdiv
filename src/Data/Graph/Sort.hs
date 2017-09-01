@@ -13,6 +13,12 @@ module Data.Graph.Sort where
 
  infix 3 <+
 
+ -- | Convert 'Revadle' to 'ShowS' with a precedence.
+ showsPrecRevadle :: Show v => Int -> Revadle v -> String -> String
+ showsPrecRevadle i (v, rs) = showParen (i > prec) $
+  showsPrec (prec + 1) v . showString " <+ " . showsPrec (prec + 1) rs where
+   prec = 3
+
  -- | 'Revadl' is a reversed adjacency list.
  type Revadl v = [Revadle v]
 
@@ -30,7 +36,7 @@ module Data.Graph.Sort where
 
  -- | Sort a graph. It's Topological sort.
  --
- -- >>> tsort [(3,[1,2]),(2,[0]),(1,[0]),(0,[])]
+ -- >>> tsort [3 <+ [1,2], 2 <+ [0], 1 <+ [0], 0 <+ []]
  -- [(0,[]),(2,[0]),(1,[0]),(3,[1,2])]
  tsort :: Eq a => Revadl a -> Revadl a
  tsort = tsort_main . tsort_sort . map copyRef
