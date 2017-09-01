@@ -14,6 +14,8 @@ module Data.Graph.Sort where
  infix 3 <+
 
  -- | Convert 'Revadle' to 'ShowS' with a precedence.
+ --
+ -- prop> showsPrecRevadle i (0 <+ []) s ++ s' == showsPrec i (0 <+ []) (s ++ s')
  showsPrecRevadle :: Show v => Int -> Revadle v -> String -> String
  showsPrecRevadle i (v, rs) = showParen (i > prec) $
   showsPrec (prec + 1) v . showString " <+ " . showsPrec (prec + 1) rs where
