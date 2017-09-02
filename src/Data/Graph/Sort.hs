@@ -12,6 +12,7 @@ module Data.Graph.Sort where
 
  infix 3 :<=
 
+ -- | /Since 0.1.0.0/
  instance Show v => Show (Revadle v) where
   showsPrec i (v :<= rs) = showParen (i > prec) $
    showsPrec (prec + 1) v . showString " :<= " . showsPrec (prec + 1) rs where
@@ -39,6 +40,7 @@ module Data.Graph.Sort where
  tsort :: Eq a => Revadl a -> Revadl a
  tsort = map fromVertext . tsort_main . tsort_sort . map copyRef
 
+ -- | Convert 'Vertext' to 'Revadle'.
  fromVertext :: Vertext a [a] -> Revadle a
  fromVertext (v, rs) = v :<= rs
 
