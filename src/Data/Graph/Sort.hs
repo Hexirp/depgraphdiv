@@ -5,21 +5,17 @@ module Data.Graph.Sort where
  import Control.Arrow (first, second)
 
  -- | 'Revadle' is a element of reversed adjacency list.
- type Revadle v = (v, [v])
-
- -- | Make 'Revadle'.
- (<+) :: v -> [v] -> Revadle v
- v <+ rs = (v, rs)
-
- infix 3 <+
-
- -- | Convert 'Revadle' to 'ShowS' with a precedence.
  --
- -- prop> showsPrecRevadle i (0 <+ []) s ++ s' == showsPrecRevadle i (0 <+ []) (s ++ s')
- showsPrecRevadle :: Show v => Int -> Revadle v -> String -> String
- showsPrecRevadle i (v, rs) = showParen (i > prec) $
-  showsPrec (prec + 1) v . showString " <+ " . showsPrec (prec + 1) rs where
-   prec = 3
+ -- Show 'Revadle':
+ -- prop> showsPrec i (0 :<= []) s ++ s' == showsPrec i (0 :<= []) (s ++ s')
+ data Revadle v = v :<= [v]
+
+ infix 3 :<=
+
+ instance Show v => Show (Revadle v) where
+  showsPrec i (v, rs) = showParen (i > prec) $
+   showsPrec (prec + 1) v . showString " :<= " . showsPrec (prec + 1) rs where
+    prec = 3
 
  -- | 'Revadl' is a reversed adjacency list.
  type Revadl v = [Revadle v]
