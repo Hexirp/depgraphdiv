@@ -2,7 +2,6 @@
 module Data.Graph.Sort where
  import Prelude
  import Data.List (sortOn, delete)
- import Control.Arrow (first, second)
 
  -- | 'Revadle' is a element of reversed adjacency list.
  --
@@ -33,12 +32,12 @@ module Data.Graph.Sort where
  -- | 'Vertextl' is a list of 'Vertext'.
  type Vertextl v t = [Vertext v t]
 
- -- | Sort a graph. It's Topological sort.
+ -- | Topologically sort a graph.
  --
  -- >>> tsort [3 :<= [1,2], 2 :<= [0], 1 :<= [0], 0 :<= []]
  -- [0 :<= [],2 :<= [0],1 :<= [0],3 :<= [1,2]]
  tsort :: Eq a => Revadl a -> Revadl a
- tsort = map fromVertext . tsort_main . tsort_sort . map copyRef
+ tsort = map fromVertext . gsort . tsort_sort . map copyRef
 
  -- | Convert 'Vertext' to 'Revadle'.
  fromVertext :: Vertext a [a] -> Revadle a
@@ -48,11 +47,11 @@ module Data.Graph.Sort where
  copyRef :: Revadle a -> Revadlet a [a]
  copyRef (v :<= r) = ((v :<= r), r)
 
- -- | Main part of 'tsort'.
- tsort_main :: Eq a => Revadlt a t -> Vertextl a t
- tsort_main [] = []
- tsort_main (x : xs) = let ((v :<= r), t) = x in case r of
-  [] -> (v, t) : (tsort_main $ tsort_sort $ tsort_delete v xs)
+ -- | Sort a graph by consuming references.
+ gsort :: Eq a => Revadlt a t -> Vertextl a t
+ gsort [] = []
+ gsort (x : xs) = let ((v :<= r), t) = x in case r of
+  [] -> (v, t) : (gsort $ tsort_sort $ tsort_delete v xs)
   _ -> error "Found Loop"
 
  -- | Sort a list of vertex in descending order of the number of vertices referenced.
