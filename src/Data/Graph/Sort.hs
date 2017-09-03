@@ -51,7 +51,7 @@ module Data.Graph.Sort where
  gsort :: Eq a => Revadlt a t -> Vertextl a t
  gsort [] = []
  gsort (x : xs) = let ((v :<= r), t) = x in case r of
-  [] -> (v, t) : (gsort $ normalize $ tsort_delete v xs)
+  [] -> (v, t) : (gsort $ normalize $ deleteRef v xs)
   _ -> error "Found Loop"
 
  -- | Sort a list of vertex in descending order of the number of vertices referenced.
@@ -67,10 +67,10 @@ module Data.Graph.Sort where
 
  -- | Delete references from a vertex in a graph.
  --
- -- >>> tsort_delete 1 [(0 :<= [], []), (2 :<= [1,3], []), (3 :<= [], [])]
+ -- >>> deleteRef 1 [(0 :<= [], []), (2 :<= [1,3], []), (3 :<= [], [])]
  -- [(0 :<= [],[]),(2 :<= [3],[]),(3 :<= [],[])]
- tsort_delete :: Eq a => a -> Revadlt a t -> Revadlt a t
- tsort_delete x = mapRefs $ delete x
+ deleteRef :: Eq a => a -> Revadlt a t -> Revadlt a t
+ deleteRef x = mapRefs $ delete x
 
  -- | Map a function to a list of reference.
  mapRefs :: ([a] -> [a]) -> Revadlt a t -> Revadlt a t
