@@ -37,7 +37,7 @@ module Data.Graph.Sort where
  -- >>> tsort [3 :<= [1,2], 2 :<= [0], 1 :<= [0], 0 :<= []]
  -- [0 :<= [],2 :<= [0],1 :<= [0],3 :<= [1,2]]
  tsort :: Eq a => Revadl a -> Revadl a
- tsort = map fromVertext . gsort . tsort_sort . map copyRef
+ tsort = map fromVertext . gsort . normalize . map copyRef
 
  -- | Convert 'Vertext' to 'Revadle'.
  fromVertext :: Vertext a [a] -> Revadle a
@@ -51,15 +51,15 @@ module Data.Graph.Sort where
  gsort :: Eq a => Revadlt a t -> Vertextl a t
  gsort [] = []
  gsort (x : xs) = let ((v :<= r), t) = x in case r of
-  [] -> (v, t) : (gsort $ tsort_sort $ tsort_delete v xs)
+  [] -> (v, t) : (gsort $ normalize $ tsort_delete v xs)
   _ -> error "Found Loop"
 
  -- | Sort a list of vertex in descending order of the number of vertices referenced.
  --
- -- >>> tsort_sort [(0 :<= [], []), (1 :<= [2,3], []), (2 :<= [3], []), (3 :<= [], [])]
+ -- >>> normalize [(0 :<= [], []), (1 :<= [2,3], []), (2 :<= [3], []), (3 :<= [], [])]
  -- [(0 :<= [],[]),(3 :<= [],[]),(2 :<= [3],[]),(1 :<= [2,3],[])]
- tsort_sort :: Eq a => Revadlt a t -> Revadlt a t
- tsort_sort = sortOn countRef
+ normalize :: Eq a => Revadlt a t -> Revadlt a t
+ normalize = sortOn countRef
 
  -- | Count the number of vertices referring to a vertex.
  countRef :: Revadlet a t -> Int
