@@ -26,33 +26,27 @@ module Data.Graph.Sort where
  -- | 'Revadlt' is a tagged reversed adjacency list.
  type Revadlt v t = [Revadlet v t]
 
- -- | 'Vertext' is a vertex and a tag.
- type Vertext v t = (v, t)
-
- -- | 'Vertextl' is a list of 'Vertext'.
- type Vertextl v t = [Vertext v t]
-
  -- | Topologically sort a graph.
  --
  -- >>> tsort [3 :<= [1,2], 2 :<= [0], 1 :<= [0], 0 :<= []]
  -- [0 :<= [],2 :<= [0],1 :<= [0],3 :<= [1,2]]
  tsort :: Eq a => Revadl a -> Revadl a
- tsort = map fromVertext . gsort . normalize . map copyRef
+ tsort = map fromRevadlet . gsort . normalize . map copyRef
 
- -- | Convert 'Vertext' to 'Revadle'.
- fromVertext :: Vertext a [a] -> Revadle a
- fromVertext (v, rs) = v :<= rs
+ -- | Convert 'Revadlet' to 'Revadle'.
+ fromRevadlet :: Revadlet a [a] -> Revadle a
+ fromRevadlet (v :<= [], rs) = v :<= rs
+ fromRevadlet _ = error "Found Loop"
 
  -- | Copy references to tags.
  copyRef :: Revadle a -> Revadlet a [a]
- copyRef (v :<= r) = ((v :<= r), r)
+ copyRef (v :<= r) = (v :<= r, r)
 
- -- | Sort a graph by consuming references.
- gsort :: Eq a => Revadlt a t -> Vertextl a t
+ -- | Topologically sort a graph by consuming references.
+ gsort :: Eq a => Revadlt a t -> Revadlt a t
  gsort [] = []
- gsort (x : xs) = let ((v :<= r), t) = x in case r of
-  [] -> (v, t) : (gsort $ normalize $ deleteRef v xs)
-  _ -> error "Found Loop"
+ gsort (x : xs) = let (v :<= r, t) = x in
+  (v :<= r, t) : (gsort $ normalize $ deleteRef v xs)
 
  -- | Sort a list of vertex in descending order of the number of vertices referenced.
  --
@@ -74,5 +68,5 @@ module Data.Graph.Sort where
 
  -- | Map a function to a list of reference.
  mapRefs :: ([a] -> [a]) -> Revadlt a t -> Revadlt a t
- mapRefs = map . mapRev where
-  mapRev f ((v :<= r), t) = ((v :<= f r), t)
+ mapRefs = map . mapRevadlet where
+  mapRevadlet f (v :<= r, t) = (v :<= f r, t)
