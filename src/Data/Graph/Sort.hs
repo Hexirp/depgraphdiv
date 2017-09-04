@@ -63,4 +63,4 @@ module Data.Graph.Sort where
  -- | Map a function to a list of reference.
  mapRefs :: ([a] -> [a]) -> Revadlt a t -> Revadlt a t
  mapRefs = map . mapRevadlet where
-  mapRevadlet f (v (r, t)) = (v, (f r, t))
+  mapRevadlet f (v, (r, t)) = (v, (f r, t))
