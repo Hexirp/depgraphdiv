@@ -21,7 +21,7 @@ module Data.Graph.Sort where
  type Revadl v = [Revadle v]
 
  -- | 'Revadlet' is composed of 'Revadle' and a tag.
- type Revadlet v t = (Revadle v, t)
+ type Revadlet v t = (v, ([v], t))
 
  -- | 'Revadlt' is a tagged reversed adjacency list.
  type Revadlt v t = [Revadlet v t]
@@ -35,38 +35,32 @@ module Data.Graph.Sort where
 
  -- | Convert 'Revadlet' to 'Revadle'.
  fromRevadlet :: Revadlet a [a] -> Revadle a
- fromRevadlet (v :<= [], rs) = v :<= rs
+ fromRevadlet (v, ([], rs)) = v :<= rs
  fromRevadlet _ = error "Found Loop"
 
  -- | Copy references to tags.
  copyRef :: Revadle a -> Revadlet a [a]
- copyRef (v :<= r) = (v :<= r, r)
+ copyRef (v :<= r) = (v, (r, r))
 
  -- | Topologically sort a graph by consuming references.
  gsort :: Eq a => Revadlt a t -> Revadlt a t
  gsort [] = []
- gsort (x : xs) = let (v :<= r, t) = x in
-  (v :<= r, t) : (gsort $ normalize $ deleteRef v xs)
+ gsort (x : xs) = let (v, (r, t)) = x in
+  (v, (r, t)) : (gsort $ normalize $ deleteRef v xs)
 
  -- | Sort a list of vertex in descending order of the number of vertices referenced.
- --
- -- >>> normalize [(0 :<= [], []), (1 :<= [2,3], []), (2 :<= [3], []), (3 :<= [], [])]
- -- [(0 :<= [],[]),(3 :<= [],[]),(2 :<= [3],[]),(1 :<= [2,3],[])]
  normalize :: Eq a => Revadlt a t -> Revadlt a t
  normalize = sortOn countRef
 
  -- | Count the number of vertices referring to a vertex.
  countRef :: Revadlet a t -> Int
- countRef ((_ :<= rs), _) = length rs
+ countRef (_, (rs, _)) = length rs
 
  -- | Delete references from a vertex in a graph.
- --
- -- >>> deleteRef 1 [(0 :<= [], []), (2 :<= [1,3], []), (3 :<= [], [])]
- -- [(0 :<= [],[]),(2 :<= [3],[]),(3 :<= [],[])]
  deleteRef :: Eq a => a -> Revadlt a t -> Revadlt a t
  deleteRef x = mapRefs $ delete x
 
  -- | Map a function to a list of reference.
  mapRefs :: ([a] -> [a]) -> Revadlt a t -> Revadlt a t
  mapRefs = map . mapRevadlet where
-  mapRevadlet f (v :<= r, t) = (v :<= f r, t)
+  mapRevadlet f (v (r, t)) = (v, (f r, t))
