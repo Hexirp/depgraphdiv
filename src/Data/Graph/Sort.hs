@@ -42,7 +42,8 @@ module Data.Graph.Sort where
  copyRef :: Revadle a -> Revadlet a [a]
  copyRef (v :<= r) = (v, (r, r))
 
- -- | Topologically sort a graph by consuming references.
+ -- | Topologically sort a tagged graph. It consume references and
+ -- output references that were not removed because they are part of loops.
  gsort :: Eq a => Revadlt a t -> Revadlt a t
  gsort [] = []
  gsort (x : xs) = let (v, (r, t)) = x in
