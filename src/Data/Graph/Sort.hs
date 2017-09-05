@@ -26,7 +26,7 @@ module Data.Graph.Sort where
  infix 3 :<==
  
  -- | /Since 0.1.0.0/
- instance Show v => Show (Revadlet v) where
+ instance (Show v, Show t) => Show (Revadlet v t) where
   showsPrec i (v :<== rs) = showParen (prec < i) $
    showsPrec (prec + 1) v . showString " :<== " . showsPrec (prec + 1) rs where
     prec = 3
