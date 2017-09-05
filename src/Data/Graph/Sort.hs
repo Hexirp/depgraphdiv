@@ -31,7 +31,7 @@ module Data.Graph.Sort where
  -- >>> tsort [3 :<= [1,2], 2 :<= [0], 1 :<= [0], 0 :<= []]
  -- [0 :<= [],2 :<= [0],1 :<= [0],3 :<= [1,2]]
  tsort :: Eq a => Revadl a -> Revadl a
- tsort = map fromRevadlet . gsort . normalize . map copyRef
+ tsort = map fromRevadlet . ttsort . normalize . map copyRef
 
  -- | Convert 'Revadlet' to 'Revadle'.
  fromRevadlet :: Revadlet a [a] -> Revadle a
@@ -42,14 +42,15 @@ module Data.Graph.Sort where
  copyRef :: Revadle a -> Revadlet a [a]
  copyRef (v :<= r) = (v, (r, r))
 
- -- | Topologically sort a tagged graph. It consume references and
- -- output references that were not removed because they are part of loops.
- gsort :: Eq a => Revadlt a t -> Revadlt a t
- gsort [] = []
- gsort (x : xs) = let (v, (r, t)) = x in
-  (v, (r, t)) : (gsort $ normalize $ deleteRef v xs)
+ -- | Topologically sort a tagged graph. It consume references and output
+ -- references that were not removed because they are part of loops.
+ ttsort :: Eq a => Revadlt a t -> Revadlt a t
+ ttsort [] = []
+ ttsort (x : xs) = let (v, (r, t)) = x in
+  (v, (r, t)) : (ttsort $ normalize $ deleteRef v xs)
 
- -- | Sort a list of vertex in descending order of the number of vertices referenced.
+ -- | Sort a list of vertex in descending order of the number of vertices
+ -- referenced.
  normalize :: Eq a => Revadlt a t -> Revadlt a t
  normalize = sortOn countRef
 
