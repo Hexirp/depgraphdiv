@@ -6,6 +6,7 @@ module Data.Graph.Sort where
  -- | 'Revadle' is a element of reversed adjacency list.
  --
  -- Show 'Revadle':
+ --
  -- prop> showsPrec i (0 :<= []) s ++ s' == showsPrec i (0 :<= []) (s ++ s')
  --
  -- >>> show (0 :<= [1])
@@ -26,6 +27,7 @@ module Data.Graph.Sort where
  -- | 'Revadlet' is a tagged 'Revadle'.
  --
  -- Show 'Revadlet':
+ --
  -- proc> showsPrec i (0 :<== ([], 0)) s ++ s' == showsPrec i (0 :<== ([], 0)) (s ++ s')
  data Revadlet v t = v :<== ([v], t)
 
