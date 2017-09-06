@@ -20,7 +20,7 @@ module Data.Graph.Sort where
  -- | 'Revadl' is a reversed adjacency list.
  type Revadl v = [Revadle v]
 
- -- | 'Revadlet' is composed of 'Revadle' and a tag.
+ -- | 'Revadlet' is a tagged 'Revadle'.
  data Revadlet v t = v :<== ([v], t)
 
  infix 3 :<==
