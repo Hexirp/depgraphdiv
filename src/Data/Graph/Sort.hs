@@ -31,12 +31,12 @@ module Data.Graph.Sort where
  -- >>> tsort [3 :<= [1,2], 2 :<= [0], 1 :<= [0], 0 :<= []]
  -- [0 :<= [],2 :<= [0],1 :<= [0],3 :<= [1,2]]
  tsort :: Eq a => Revadl a -> Revadl a
- tsort = map fromRevadlet . ttsort . normalize . map copyRef
+ tsort = map interpret . ttsort . normalize . map copyRef
 
  -- | Convert 'Revadlet' to 'Revadle'.
- fromRevadlet :: Revadlet a [a] -> Revadle a
- fromRevadlet (v, ([], rs)) = v :<= rs
- fromRevadlet _ = error "Found Loop"
+ interpret :: Revadlet a [a] -> Revadle a
+ interpret (v, ([], rs)) = v :<= rs
+ interpret _ = error "Found Loop"
 
  -- | Copy references to tags.
  copyRef :: Revadle a -> Revadlet a [a]
