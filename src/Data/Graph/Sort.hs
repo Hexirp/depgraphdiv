@@ -28,7 +28,7 @@ module Data.Graph.Sort where
  --
  -- Show 'Revadlet':
  --
- -- proc> showsPrec i (0 :<== ([], 0)) s ++ s' == showsPrec i (0 :<== ([], 0)) (s ++ s')
+ -- prop> showsPrec i (0 :<== ([], 0)) s ++ s' == showsPrec i (0 :<== ([], 0)) (s ++ s')
  data Revadlet v t = v :<== ([v], t)
 
  infix 3 :<==
