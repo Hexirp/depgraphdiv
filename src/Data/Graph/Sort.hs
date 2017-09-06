@@ -44,6 +44,8 @@ module Data.Graph.Sort where
 
  -- | Topologically sort a graph.
  --
+ -- Example:
+ --
  -- >>> tsort [3 :<= [1,2], 2 :<= [0], 1 :<= [0], 0 :<= []]
  -- [0 :<= [],2 :<= [0],1 :<= [0],3 :<= [1,2]]
  tsort :: Eq a => Revadl a -> Revadl a
@@ -60,6 +62,11 @@ module Data.Graph.Sort where
 
  -- | Topologically sort a tagged graph. It consume references and output
  -- references that were not removed because they are part of loops.
+ --
+ -- Example:
+ --
+ -- >>> ttsort [0 :<== ([], "zero"), 1 :<== ([0], "one"), 2 :<== ([0, 1], "two"), 3 :<== ([0, 1, 2], "three")]
+ -- [0 :<== ([],"zero"),1 :<== ([],"one"),2 :<== ([],"two"),3 :<== ([],"three")]
  ttsort :: Eq a => Revadlt a t -> Revadlt a t
  ttsort [] = []
  ttsort (x : xs) = let (v :<== (r, t)) = x in
