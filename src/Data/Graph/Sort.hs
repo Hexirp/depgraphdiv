@@ -7,6 +7,9 @@ module Data.Graph.Sort where
  --
  -- Show 'Revadle':
  -- prop> showsPrec i (0 :<= []) s ++ s' == showsPrec i (0 :<= []) (s ++ s')
+ --
+ -- >>> show (0 :<= [1])
+ -- "0 :<= [1]"
  data Revadle v = v :<= [v]
 
  infix 3 :<=
@@ -21,6 +24,9 @@ module Data.Graph.Sort where
  type Revadl v = [Revadle v]
 
  -- | 'Revadlet' is a tagged 'Revadle'.
+ --
+ -- Show 'Revadlet':
+ -- proc> showsPrec i (0 :<== ([], 0)) s ++ s' == showsPrec i (0 :<== ([], 0)) (s ++ s')
  data Revadlet v t = v :<== ([v], t)
 
  infix 3 :<==
