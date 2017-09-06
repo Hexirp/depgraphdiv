@@ -13,15 +13,23 @@ module Data.Graph.Sort where
 
  -- | /Since 0.1.0.0/
  instance Show v => Show (Revadle v) where
-  showsPrec i (v :<= rs) = showParen (i > prec) $
-   showsPrec (prec + 1) v . showString " :<= " . showsPrec (prec + 1) rs where
-    prec = 3
+  showsPrec i (k :<= v) = showParen (prc < i) $
+   showsPrec (prc + 1) k . showString " :<= " . showsPrec (prc + 1) v where
+    prc = 3
 
  -- | 'Revadl' is a reversed adjacency list.
  type Revadl v = [Revadle v]
 
  -- | 'Revadlet' is composed of 'Revadle' and a tag.
- type Revadlet v t = (v, ([v], t))
+ data Revadlet v t = v :<== ([v], t)
+
+ infix 3 :<==
+
+ -- | /Since 0.1.0.0/
+ instance (Show v, Show t) => Show (Revadlet v t) where
+  showsPrec i (k :<== v) = showParen (prc < i) $
+   showsPrec (prc + 1) k . showString " :<== " . showsPrec (prc + 1) v where
+    prc = 3
 
  -- | 'Revadlt' is a tagged reversed adjacency list.
  type Revadlt v t = [Revadlet v t]
@@ -35,19 +43,19 @@ module Data.Graph.Sort where
 
  -- | Convert 'Revadlet' to 'Revadle'.
  interpret :: Revadlet a [a] -> Revadle a
- interpret (v, ([], rs)) = v :<= rs
+ interpret (v :<== ([], rs)) = v :<= rs
  interpret _ = error "Found Loop"
 
  -- | Copy references to tags.
  copyRef :: Revadle a -> Revadlet a [a]
- copyRef (v :<= r) = (v, (r, r))
+ copyRef (v :<= r) = (v :<== (r, r))
 
  -- | Topologically sort a tagged graph. It consume references and output
  -- references that were not removed because they are part of loops.
  ttsort :: Eq a => Revadlt a t -> Revadlt a t
  ttsort [] = []
- ttsort (x : xs) = let (v, (r, t)) = x in
-  (v, (r, t)) : (ttsort $ normalize $ deleteRef v xs)
+ ttsort (x : xs) = let (v :<== (r, t)) = x in
+  (v :<== (r, t)) : (ttsort $ normalize $ deleteRef v xs)
 
  -- | Sort a list of vertex in descending order of the number of vertices
  -- referenced.
@@ -56,7 +64,7 @@ module Data.Graph.Sort where
 
  -- | Count the number of vertices referring to a vertex.
  countRef :: Revadlet a t -> Int
- countRef (_, (rs, _)) = length rs
+ countRef (_ :<== (rs, _)) = length rs
 
  -- | Delete references from a vertex in a graph.
  deleteRef :: Eq a => a -> Revadlt a t -> Revadlt a t
@@ -65,4 +73,4 @@ module Data.Graph.Sort where
  -- | Map a function to a list of reference.
  mapRefs :: ([a] -> [a]) -> Revadlt a t -> Revadlt a t
  mapRefs = map . mapRevadlet where
-  mapRevadlet f (v, (r, t)) = (v, (f r, t))
+  mapRevadlet f (v :<== (r, t)) = (v :<== (f r, t))
