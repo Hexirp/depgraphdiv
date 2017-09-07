@@ -46,19 +46,19 @@ module Data.Graph.Sort where
  --
  -- Example:
  --
- -- >>> tsort [3 :<= [1,2], 2 :<= [0], 1 :<= [0], 0 :<= []]
- -- [0 :<= [],2 :<= [0],1 :<= [0],3 :<= [1,2]]
+ -- >>> tsort [3 :<= [], 2 :<= [0], 1 :<= [0], 0 :<= [1, 2]]
+ -- [3 :<= [],2 :<= [0],1 :<= [0],0 :<= [1,2]]
  tsort :: Eq a => Revadl a -> Revadl a
- tsort = map interpret . ttsort . normalize . map copyRef
+ tsort = map recoverRefs . ttsort . map copyRefs
 
- -- | Convert 'Revadlet' to 'Revadle'.
- interpret :: Revadlet a [a] -> Revadle a
- interpret (v :<== ([], rs)) = v :<= rs
- interpret _ = error "Found Loop"
+ -- | Recover references from a tag.
+ recoverRefs :: Revadlet a [a] -> Revadle a
+ recoverRefs (v :<== ([], rs)) = v :<= rs
+ recoverRefs _ = error "Found Loop"
 
- -- | Copy references to tags.
- copyRef :: Revadle a -> Revadlet a [a]
- copyRef (v :<= r) = (v :<== (r, r))
+ -- | Copy references to a tag.
+ copyRefs :: Revadle a -> Revadlet a [a]
+ copyRefs (v :<= r) = (v :<== (r, r))
 
  -- | Topologically sort a tagged graph. It consume references and output
  -- references that were not removed because they are part of loops.
