@@ -47,7 +47,7 @@ module Data.Graph.Sort where
  -- Example:
  --
  -- >>> tsort [3 :<= [], 2 :<= [0], 1 :<= [0], 0 :<= [1, 2]]
- -- [3 :<= [],2 :<= [0],1 :<= [0],0 :<= [1,2]]
+ -- [3 :<= [],2 :<= [3],1 :<= [3],0 :<= [1,2]]
  tsort :: Eq a => Revadl a -> Revadl a
  tsort = map recoverRefs . ttsort . map copyRefs
 
