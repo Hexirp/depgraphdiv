@@ -1,7 +1,7 @@
 -- | Provide Topological sort.
 module Data.Graph.Sort where
  import Prelude
- import Data.List (sortOn, delete)
+ import Data.List (sortOn, delete, unfoldr)
 
  -- | 'Revadle' is a element of reversed adjacency list.
  --
@@ -73,9 +73,10 @@ module Data.Graph.Sort where
  -- >>> ttsort [0 :<== ([], '0'), 3 :<== ([0], '3'), 2 :<== ([0], '2'), 1 :<== ([0], '1')]
  -- [0 :<== ([],'0'),3 :<== ([],'3'),2 :<== ([],'2'),1 :<== ([],'1')]
  ttsort :: Eq a => Revadlt a t -> Revadlt a t
- ttsort [] = []
- ttsort (x : xs) = let (v :<== (r, t)) = x in
-  (v :<== (r, t)) : (ttsort $ normalize $ deleteRef v xs)
+ ttsort = unfoldr go where
+  go [] = Nothing
+  go (x : xs) = let (v :<== (r, t)) = x in
+   Just (x, normalize $ deleteRef v xs)
 
  -- | Sort a list of vertex in descending order of the number of vertices
  -- referenced.
