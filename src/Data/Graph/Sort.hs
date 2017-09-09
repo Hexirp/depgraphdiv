@@ -75,8 +75,7 @@ module Data.Graph.Sort where
  ttsort :: Eq a => Revadlt a t -> Revadlt a t
  ttsort = unfoldr go where
   go [] = Nothing
-  go (x : xs) = let (v :<== (r, t)) = x in
-   Just (x, normalize $ deleteRef v xs)
+  go (x@(v :<== _) : xs) = Just (x, normalize $ deleteRef v xs)
 
  -- | Sort a list of vertex in descending order of the number of vertices
  -- referenced.
