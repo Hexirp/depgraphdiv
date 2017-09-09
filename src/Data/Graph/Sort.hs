@@ -75,11 +75,7 @@ module Data.Graph.Sort where
  ttsort :: Eq a => Revadlt a t -> Revadlt a t
  ttsort [] = []
  ttsort (x : xs) = let (v :<== (r, t)) = x in
-  (v :<== (r, t)) : (ttsort $ update v xs)
-
- -- | Delete references from a vertex.
- update :: Eq a => a -> Revadlt a t -> Revadlt a t
- update v = normalize . deleteRef v
+  (v :<== (r, t)) : (ttsort $ normalize $ deleteRef v xs)
 
  -- | Sort a list of vertex in descending order of the number of vertices
  -- referenced.
