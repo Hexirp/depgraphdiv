@@ -49,13 +49,13 @@ test-suite depgraphdiv-doctest
   ghc-options:         -W -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
  
- benchmark depgraphdiv-benchmark
-   type:             exitcode-stdio-1.0
-   main-is:          bench.hs
-   ghc-options:      -Wall
-   hs-source-dirs:   benchmark
-   build-depends:    base, depgrapgdiv, criterion
-   default-language: Haskell2010
+benchmark depgraphdiv-benchmark
+  type:             exitcode-stdio-1.0
+  main-is:          bench.hs
+  ghc-options:      -Wall
+  hs-source-dirs:   benchmark
+  build-depends:    base, depgrapgdiv, criterion
+  default-language: Haskell2010
 
 source-repository head
   type:     git
