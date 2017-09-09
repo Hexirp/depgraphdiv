@@ -1,6 +1,10 @@
 import Criterion.Main
+import Control.DeepSeq
 
 import Data.Graph.Sort
+
+instance (NFData v, NFData t) => NFData (Revadlet v t) where
+ rnf (v :<== rt) = deepseq v (deepseq rt ())
 
 benchdata_ttsort :: Int -> Revadlt Int ()
 benchdata_ttsort 0 = []
