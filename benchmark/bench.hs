@@ -2,11 +2,11 @@ import Criterion.Main
 
 import Data.Graph.Sort
 
-benchdata_ttsort :: Int -> Revadlet Int ()
+benchdata_ttsort :: Int -> Revadlt Int ()
 benchdata_ttsort 0 = []
 benchdata_ttsort n = (n :<== ([],())) : benchdata_ttsort (n - 1)
 
-bench_ttsort :: Int -> Revadlet Int ()
+bench_ttsort :: Int -> Revadlt Int ()
 bench_ttsort = ttsort . benchdata_ttsort
 
 main :: IO ()
