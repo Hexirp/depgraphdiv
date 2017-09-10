@@ -15,6 +15,8 @@ bench_ttsort = ttsort . benchdata_ttsort
 
 main :: IO ()
 main = defaultMain [
- bench "ttsort 100" $ nf bench_ttsort 100,
- bench "ttsort 200" $ nf bench_ttsort 200,
- bench "ttsort 300" $ nf bench_ttsort 300]
+ bgroup "ttsort" [
+  bench "100" $ nf bench_ttsort 100,
+  bench "200" $ nf bench_ttsort 200,
+  bench "300" $ nf bench_ttsort 300,
+  bench "400" $ nf bench_ttsort 400]]
