@@ -4,6 +4,7 @@ module Data.Graph.Sort where
  import Data.List (sortOn, delete, unfoldr)
 
  -- | 'Revadle' is a element of reversed adjacency list.
+ -- It's composed of a vertex (top) and vertices referring to a top (references).
  --
  -- Show 'Revadle':
  --
@@ -72,6 +73,12 @@ module Data.Graph.Sort where
  --
  -- >>> ttsort [0 :<== ([], '0'), 3 :<== ([0], '3'), 2 :<== ([0], '2'), 1 :<== ([0], '1')]
  -- [0 :<== ([],'0'),3 :<== ([],'3'),2 :<== ([],'2'),1 :<== ([],'1')]
+ --
+ -- Constraint:
+ --
+ -- An argument are assumed to satisfy this constraint.
+ --
+ -- TODO
  ttsort :: Eq a => Revadlt a t -> Revadlt a t
  ttsort = unfoldr go where
   go [] = Nothing
