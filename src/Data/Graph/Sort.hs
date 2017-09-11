@@ -76,9 +76,11 @@ module Data.Graph.Sort where
  --
  -- Constraint:
  --
- -- An argument are assumed to satisfy this constraint.
+ -- An argument are assumed to satisfy this constraints.
  --
- -- TODO
+ -- * A list of tops has no overlap.
+ -- * The list does not change if 'normalize' is applied.
+ -- * Each list of references has no duplication.
  ttsort :: Eq a => Revadlt a t -> Revadlt a t
  ttsort = unfoldr go where
   go [] = Nothing
