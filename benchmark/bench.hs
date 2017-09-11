@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+
 import Criterion.Main
 import Control.DeepSeq
 
