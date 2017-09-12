@@ -89,6 +89,10 @@ module Data.Graph.Sort where
  -- | Tag the number of vertices referring to a vertex.
  tagLength :: Revadlet a t -> Revadlet a (t, Int)
  tagLength (v :<== (rs, t)) = v :<== (rs, (t, length rs))
+ 
+ -- | Drop references from a vertex.
+ dropRef :: a -> [a] -> ([a], Bool)
+ dropRef x y = (delete x y, elem x y)
 
  -- | Sort a list of vertex in descending order of the number of vertices
  -- referenced.
