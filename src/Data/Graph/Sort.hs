@@ -113,6 +113,11 @@ module Data.Graph.Sort where
    False -> go (kf ++ [x'], kt) xs
    True -> go (kf, kt ++ [x']) xs
 
+ -- | TODO
+ mergeRevadlt :: [(Revadlt a (t, Int), Revadlt a (t, Int)] -> [Revadlt a (t, Int)]
+ mergeRevadlt [] = []
+ mergeRevadlt ((xf, xt) : xs) = xf ++ xt ++ mergeRevadlt xs
+
  -- | Sort a list of vertex in descending order of the number of vertices
  -- referenced.
  normalize :: Eq a => Revadlt a t -> Revadlt a t
