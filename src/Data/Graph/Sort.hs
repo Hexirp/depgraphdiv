@@ -92,13 +92,14 @@ module Data.Graph.Sort where
 
  -- | Split 'Revadlt' by the number of references.
  splitRevadlt :: Revadlt a (t, Int) -> [Revadlt a (t, Int)]
- splitRevadlt [] = []
- splitRevadlt (x : xs) = let (ys, zs) = sp (co x) xs in (x : ys) : splitRevadlt zs where
-  co (_ :<== (_, (_, n))) = n
-  sp _ [] = ([], [])
-  sp n (x : xs) = case n == co x of
-   False -> ([], x : xs)
-   True -> let (ys, zs) = sp n xs in (x : ys, zs)
+ splitRevadlt = unfoldr go where
+  go [] = Nothing
+  go (x : xs) = let (ys, zs) = sp (co x) xs in (x : ys, zs) where
+   co (_ :<== (_, (_, n))) = n
+   sp _ [] = ([], [])
+   sp n (x : xs) = case n == co x of
+    False -> ([], x : xs)
+    True -> let (ys, zs) = sp n xs in (x : ys, zs)
   
  -- | Drop references from a vertex.
  dropRef :: Eq a => a -> Revadlet a t -> (Revadlet a t, Bool)
