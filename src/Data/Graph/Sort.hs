@@ -91,7 +91,7 @@ module Data.Graph.Sort where
  tagLength (v :<== (rs, t)) = v :<== (rs, (t, length rs))
  
  -- | Drop references from a vertex.
- dropRef :: a -> [a] -> ([a], Bool)
+ dropRef :: Eq a => a -> [a] -> ([a], Bool)
  dropRef x y = (delete x y, elem x y)
 
  -- | Sort a list of vertex in descending order of the number of vertices
