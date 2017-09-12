@@ -114,7 +114,7 @@ module Data.Graph.Sort where
    True -> go (kf, kt ++ [x']) xs
 
  -- | TODO
- mergeRevadlt :: [(Revadlt a (t, Int), Revadlt a (t, Int)] -> [Revadlt a (t, Int)]
+ mergeRevadlt :: [(Revadlt a (t, Int), Revadlt a (t, Int))] -> Revadlt a (t, Int)
  mergeRevadlt [] = []
  mergeRevadlt ((xf, xt) : xs) = xf ++ xt ++ mergeRevadlt xs
 
