@@ -118,6 +118,10 @@ module Data.Graph.Sort where
  mergeRevadlt [] = []
  mergeRevadlt ((xf, xt) : xs) = xf ++ xt ++ mergeRevadlt xs
 
+ -- | TODO
+ untagLength :: Revadlet a (t, Int) -> Revadlet a t
+ untagLength (a :<== (rs, (t, _))) = a :<== (rs, t)
+
  -- | Sort a list of vertex in descending order of the number of vertices
  -- referenced.
  normalize :: Eq a => Revadlt a t -> Revadlt a t
