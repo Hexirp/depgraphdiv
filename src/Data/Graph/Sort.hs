@@ -106,7 +106,8 @@ module Data.Graph.Sort where
  dropRef x (v :<== (rs, t)) = (v :<== (delete x rs, t), elem x rs)
 
  -- | TODO
- separateRevadlt :: a -> Revadlt a (t, Int) -> (Revadlt a (t, Int), Revadlt a (t, Int))
+ separateRevadlt
+  :: Eq a => a -> Revadlt a (t, Int) -> (Revadlt a (t, Int), Revadlt a (t, Int))
  separateRevadlt v = go ([], []) where
   go k [] = k
   go (kf, kt) (x : xs) = let (x', d) = dropRef v x in case d of
@@ -114,7 +115,8 @@ module Data.Graph.Sort where
    True -> go (kf, kt ++ [x']) xs
 
  -- | TODO
- mergeRevadlt :: [(Revadlt a (t, Int), Revadlt a (t, Int))] -> Revadlt a (t, Int)
+ mergeRevadlt
+  :: [(Revadlt a (t, Int), Revadlt a (t, Int))] -> Revadlt a (t, Int)
  mergeRevadlt [] = []
  mergeRevadlt ((xf, xt) : xs) = xf ++ xt ++ mergeRevadlt xs
 
