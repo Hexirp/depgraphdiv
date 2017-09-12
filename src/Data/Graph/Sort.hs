@@ -103,7 +103,7 @@ module Data.Graph.Sort where
   
  -- | Drop references from a vertex.
  dropRef :: Eq a => a -> Revadlet a t -> (Revadlet a t, Bool)
- dropRef x y = (delete x y, elem x y)
+ dropRef x (v :<== (rs, t)) = (v :<== (delete x rs, t), elem x rs)
 
  -- | TODO
  separateRevadlt :: a -> Revadlt a (t, Int) -> (Revadlt a (t, Int), Revadlt a (t, Int))
