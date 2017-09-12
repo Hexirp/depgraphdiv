@@ -59,7 +59,7 @@ module Data.Graph.Sort where
 
  -- | Copy references to a tag.
  copyRefs :: Revadle a -> Revadlet a [a]
- copyRefs (v :<= r) = (v :<== (r, r))
+ copyRefs (v :<= r) = v :<== (r, r)
 
  -- | Topologically sort a tagged graph. It consume references and output
  -- references that were not removed because they are part of loops.
@@ -85,6 +85,10 @@ module Data.Graph.Sort where
  ttsort = unfoldr go where
   go [] = Nothing
   go (x@(v :<== _) : xs) = Just (x, normalize $ deleteRef v xs)
+  
+ -- | Tag the number of vertices referring to a vertex.
+ tagLength :: Revadlet a t -> Revadlet a (t, Int)
+ tagLength (v :<== (rs, t)) = v :<== (rs, (t, length rs))
 
  -- | Sort a list of vertex in descending order of the number of vertices
  -- referenced.
@@ -102,4 +106,4 @@ module Data.Graph.Sort where
  -- | Map a function to a list of reference.
  mapRefs :: ([a] -> [a]) -> Revadlt a t -> Revadlt a t
  mapRefs = map . mapRevadlet where
-  mapRevadlet f (v :<== (r, t)) = (v :<== (f r, t))
+  mapRevadlet f (v :<== (r, t)) = v :<== (f r, t)
