@@ -89,7 +89,18 @@ module Data.Graph.Sort where
  -- | Tag the number of vertices referring to a vertex.
  tagLength :: Revadlet a t -> Revadlet a (t, Int)
  tagLength (v :<== (rs, t)) = v :<== (rs, (t, length rs))
- 
+
+ -- | Split 'Revadlt' by the number of references.
+ splitRevadlt :: Revadlt a (t, Int) -> [Revadlt a (t, Int)]
+ splitRevadlt = go 0 [] where
+  co (_ :<== (_, (_, n))) = n
+  go i [] [] = []
+  go i k [] = [k]
+  go i k (x : xs) = case compare i (co x) of
+   LT -> error "Invalid argument"
+   EQ -> go i (k ++ [x]) xs
+   GT -> k : go (co x) [] xs
+  
  -- | Drop references from a vertex.
  dropRef :: Eq a => a -> [a] -> ([a], Bool)
  dropRef x y = (delete x y, elem x y)
