@@ -105,6 +105,14 @@ module Data.Graph.Sort where
  dropRef :: Eq a => a -> [a] -> ([a], Bool)
  dropRef x y = (delete x y, elem x y)
 
+ -- | TODO
+ separateRevadlt :: a -> Revadlt a (t, Int) -> (Revadlt a (t, Int), Revadlt a (t, Int))
+ separateRevadlt v = go ([], []) where
+  go k [] = k
+  go (kf, kt) (x : xs) = let (x', d) = dropRef v x in case b of
+   False -> go (kf ++ [x'], kt) xs
+   True -> go (kf, kt ++ [x']) xs
+
  -- | Sort a list of vertex in descending order of the number of vertices
  -- referenced.
  normalize :: Eq a => Revadlt a t -> Revadlt a t
