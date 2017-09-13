@@ -94,7 +94,7 @@ module Data.Graph.Sort where
  splitRevadlt :: Revadlt a (t, Int) -> [Revadlt a (t, Int)]
  splitRevadlt = unfoldr go where
   go [] = Nothing
-  go (x : xs) = let (ys, zs) = sp (co x) xs in (x : ys, zs) where
+  go (x : xs) = let (ys, zs) = sp (co x) xs in Just (x : ys, zs) where
    co (_ :<== (_, (_, n))) = n
    sp _ [] = ([], [])
    sp n (x : xs) = case n == co x of
