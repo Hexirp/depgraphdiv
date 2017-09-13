@@ -101,18 +101,14 @@ module Data.Graph.Sort where
     False -> ([], x : xs)
     True -> let (ys, zs) = sp n xs in (x : ys, zs)
   
- -- | Drop references from a vertex.
- dropRef :: Eq a => a -> Revadlet a t -> (Revadlet a t, Bool)
- dropRef x (v :<== (rs, t)) = (v :<== (delete x rs, t), elem x rs)
-
  -- | TODO
  separateRevadlt
   :: Eq a => a -> Revadlt a (t, Int) -> (Revadlt a (t, Int), Revadlt a (t, Int))
- separateRevadlt v = go ([], []) where
-  go k [] = k
-  go (kf, kt) (x : xs) = let (x', d) = dropRef v x in case d of
-   False -> go (kf ++ [x'], kt) xs
-   True -> go (kf, kt ++ [x']) xs
+ separateRevadlt v = foldr go ([], []) where
+  dr x s = (delete x s, elem x s)
+  go (v :<== (rs, (t, i))) (ts, fs) = let (rs', b) = dr x rs in case b of
+   False -> (ts, (v :<== (rs', (t, i))) : fs)
+   True -> ((v :<== (rs', (t, i - 1))) : ts, fs)
 
  -- | TODO
  mergeRevadlt
