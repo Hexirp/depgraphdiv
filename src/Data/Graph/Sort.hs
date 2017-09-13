@@ -104,7 +104,7 @@ module Data.Graph.Sort where
  -- | TODO
  separateRevadlt
   :: Eq a => a -> Revadlt a (t, Int) -> (Revadlt a (t, Int), Revadlt a (t, Int))
- separateRevadlt v = foldr go ([], []) where
+ separateRevadlt x = foldr go ([], []) where
   dr x s = (delete x s, elem x s)
   go (v :<== (rs, (t, i))) (ts, fs) = let (rs', b) = dr x rs in case b of
    False -> (ts, (v :<== (rs', (t, i))) : fs)
