@@ -9,8 +9,8 @@ instance (NFData v, NFData t) => NFData (Revadlet v t) where
  rnf (v :<== rt) = deepseq v (deepseq rt ())
 
 benchdata_ttsort :: Int -> Revadlt Int ()
-benchdata_ttsort 0 = []
-benchdata_ttsort n = (n :<== ([],())) : benchdata_ttsort (n - 1)
+benchdata_ttsort = map el . flip take [0..] where
+ el n = n :<== (take n [0..], ())
 
 bench_ttsort :: Int -> Revadlt Int ()
 bench_ttsort = ttsort . benchdata_ttsort
