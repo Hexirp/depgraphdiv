@@ -87,6 +87,8 @@ module Data.Graph.Sort where
  type Revadleti v t = Revadlet v (t, Int)
 
  type Revadlti v t = [Revadleti v t]
+ 
+ type Revadltid v t = Revadlti v t -> Revadlti v t
 
  ttsort' :: Eq a => Revadlti a t -> Revadlti a t
  ttsort' = unfoldr go where
@@ -110,17 +112,17 @@ module Data.Graph.Sort where
     True -> let (ys, zs) = sp n xs in (x : ys, zs)
 
  separateRevadlt
-  :: Eq a => a -> Revadlti a t -> (Revadlti a t, Revadlti a t)
- separateRevadlt x = foldr go ([], []) where
+  :: Eq a => a -> Revadlti a t -> (Revadltid a t, Revadltid a t)
+ separateRevadlt x = foldr go (id, id) where
   dr x s = (delete x s, elem x s)
   go (v :<== (rs, (t, i))) (ts, fs) = let (rs', b) = dr x rs in case b of
-   False -> (ts, (v :<== (rs', (t, i))) : fs)
-   True -> ((v :<== (rs', (t, i - 1))) : ts, fs)
+   False -> (ts, ((v :<== (rs', (t, i))) :) . fs)
+   True -> (((v :<== (rs', (t, i - 1))) :) . ts, fs)
 
  mergeRevadlt
-  :: [(Revadlti a t, Revadlti a t)] -> Revadlti a t
+  :: [(Revadltid a t, Revadltid a t)] -> Revadlti a t
  mergeRevadlt [] = []
- mergeRevadlt ((xf, xt) : xs) = xf ++ xt ++ mergeRevadlt xs
+ mergeRevadlt ((xf, xt) : xs) = xf $ xt $ mergeRevadlt xs
 
  untagLength :: Revadleti a t -> Revadlet a t
  untagLength (a :<== (rs, (t, _))) = a :<== (rs, t)
