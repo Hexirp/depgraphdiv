@@ -16,7 +16,7 @@ module Data.Graph.Sort where
 
  infix 3 :<=
 
- -- | /Since 0.1.0.0/
+ -- | @since 0.1.0.0
  instance Show v => Show (Revadle v) where
   showsPrec i (k :<= v) = showParen (prc < i) $
    showsPrec (prc + 1) k . showString " :<= " . showsPrec (prc + 1) v where
@@ -34,7 +34,7 @@ module Data.Graph.Sort where
 
  infix 3 :<==
 
- -- | /Since 0.1.0.0/
+ -- | @since 0.1.0.0
  instance (Show v, Show t) => Show (Revadlet v t) where
   showsPrec i (k :<== v) = showParen (prc < i) $
    showsPrec (prc + 1) k . showString " :<== " . showsPrec (prc + 1) v where
@@ -59,7 +59,7 @@ module Data.Graph.Sort where
 
  -- | Copy references to a tag.
  copyRefs :: Revadle a -> Revadlet a [a]
- copyRefs (v :<= r) = (v :<== (r, r))
+ copyRefs (v :<= r) = v :<== (r, r)
 
  -- | Topologically sort a tagged graph. It consume references and output
  -- references that were not removed because they are part of loops.
@@ -82,9 +82,54 @@ module Data.Graph.Sort where
  -- * The list does not change if 'normalize' is applied.
  -- * Each list of references has no duplication.
  ttsort :: Eq a => Revadlt a t -> Revadlt a t
- ttsort = unfoldr go where
+ ttsort = map untagLength . ttsort' . map tagLength
+
+ type Revadleti v t = Revadlet v (t, Int)
+
+ type Revadlti v t = [Revadleti v t]
+ 
+ type Revadltid v t = Revadlti v t -> Revadlti v t
+
+ ttsort' :: Eq a => Revadlti a t -> Revadlti a t
+ ttsort' = unfoldr go where
   go [] = Nothing
-  go (x@(v :<== _) : xs) = Just (x, normalize $ deleteRef v xs)
+  go (x@(v :<== _) : xs) =
+   Just (x, mergeRevadlt $ map (separateRevadlt v) $ splitRevadlt $ xs)
+
+ -- | Tag the number of vertices referring to a vertex.
+ tagLength :: Revadlet a t -> Revadleti a t
+ tagLength (v :<== (rs, t)) = v :<== (rs, (t, length rs))
+
+ -- | Split 'Revadlt' by the number of references.
+ splitRevadlt :: Revadlti a t -> [Revadlti a t]
+ splitRevadlt = unfoldr go where
+  go [] = Nothing
+  go (x : xs) = let (ys, zs) = sp (co x) xs in Just (x : ys, zs) where
+   co (_ :<== (_, (_, n))) = n
+   sp _ [] = ([], [])
+   sp n (x : xs) = case n == co x of
+    False -> ([], x : xs)
+    True -> let (ys, zs) = sp n xs in (x : ys, zs)
+
+ separateRevadlt
+  :: Eq a => a -> Revadlti a t -> (Revadltid a t, Revadltid a t)
+ separateRevadlt x = foldr go (id, id) where
+  dr [] = ([], False)
+  dr (y : ys) = case x == y of
+   False -> let (ys', b) = dr ys in (y : ys', b)
+   True -> (ys, True)
+  go (v :<== (rs, (t, i))) (ts, fs) = let (rs', b) = dr rs in case b of
+   False -> (ts, bl v rs' t i . fs)
+   True -> (bl v rs' t (i - 1) . ts, fs)
+  bl v rs t i xs = (v :<== (rs, (t, i))) : xs
+
+ mergeRevadlt
+  :: [(Revadltid a t, Revadltid a t)] -> Revadlti a t
+ mergeRevadlt = foldr go [] where
+  go (ts, fs) xs = ts $ fs $ xs
+
+ untagLength :: Revadleti a t -> Revadlet a t
+ untagLength (a :<== (rs, (t, _))) = a :<== (rs, t)
 
  -- | Sort a list of vertex in descending order of the number of vertices
  -- referenced.
@@ -102,4 +147,4 @@ module Data.Graph.Sort where
  -- | Map a function to a list of reference.
  mapRefs :: ([a] -> [a]) -> Revadlt a t -> Revadlt a t
  mapRefs = map . mapRevadlet where
-  mapRevadlet f (v :<== (r, t)) = (v :<== (f r, t))
+  mapRevadlet f (v :<== (r, t)) = v :<== (f r, t)
