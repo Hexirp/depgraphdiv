@@ -82,9 +82,7 @@ module Data.Graph.Sort where
  -- * The list does not change if 'normalize' is applied.
  -- * Each list of references has no duplication.
  ttsort :: Eq a => Revadlt a t -> Revadlt a t
- ttsort = unfoldr go where
-  go [] = Nothing
-  go (x@(v :<== _) : xs) = Just (x, normalize $ deleteRef v xs)
+ ttsort = map untagLength . ttsort' . map tagLength
 
  type Revadleti v t = Revadlet v (t, Int)
 
