@@ -16,7 +16,7 @@ module Data.Graph.Sort where
 
  infix 3 :<=
 
- -- | /Since 0.1.0.0/
+ -- | @since 0.1.0.0
  instance Show v => Show (Revadle v) where
   showsPrec i (k :<= v) = showParen (prc < i) $
    showsPrec (prc + 1) k . showString " :<= " . showsPrec (prc + 1) v where
@@ -34,7 +34,7 @@ module Data.Graph.Sort where
 
  infix 3 :<==
 
- -- | /Since 0.1.0.0/
+ -- | @since 0.1.0.0
  instance (Show v, Show t) => Show (Revadlet v t) where
   showsPrec i (k :<== v) = showParen (prc < i) $
    showsPrec (prc + 1) k . showString " :<== " . showsPrec (prc + 1) v where
@@ -111,7 +111,6 @@ module Data.Graph.Sort where
     False -> ([], x : xs)
     True -> let (ys, zs) = sp n xs in (x : ys, zs)
 
- -- | TODO
  separateRevadlt
   :: Eq a => a -> Revadlti a t -> (Revadlti a t, Revadlti a t)
  separateRevadlt x = foldr go ([], []) where
@@ -120,13 +119,11 @@ module Data.Graph.Sort where
    False -> (ts, (v :<== (rs', (t, i))) : fs)
    True -> ((v :<== (rs', (t, i - 1))) : ts, fs)
 
- -- | TODO
  mergeRevadlt
   :: [(Revadlti a t, Revadlti a t)] -> Revadlti a t
  mergeRevadlt [] = []
  mergeRevadlt ((xf, xt) : xs) = xf ++ xt ++ mergeRevadlt xs
 
- -- | TODO
  untagLength :: Revadleti a t -> Revadlet a t
  untagLength (a :<== (rs, (t, _))) = a :<== (rs, t)
 
