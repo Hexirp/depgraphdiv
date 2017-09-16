@@ -121,8 +121,8 @@ module Data.Graph.Sort where
 
  mergeRevadlt
   :: [(Revadltid a t, Revadltid a t)] -> Revadlti a t
- mergeRevadlt [] = []
- mergeRevadlt ((xf, xt) : xs) = xf $ xt $ mergeRevadlt xs
+ mergeRevadlt = foldr go [] where
+  go (ts, fs) xs = ts $ fs $ xs
 
  untagLength :: Revadleti a t -> Revadlet a t
  untagLength (a :<== (rs, (t, _))) = a :<== (rs, t)
