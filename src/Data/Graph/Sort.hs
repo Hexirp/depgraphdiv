@@ -85,11 +85,17 @@ module Data.Graph.Sort where
  ttsort = unfoldr go where
   go [] = Nothing
   go (x@(v :<== _) : xs) = Just (x, normalize $ deleteRef v xs)
- 
+
  type Revadleti v t = Revadlet v (t, Int)
- 
+
  type Revadlti v t = [Revadleti v t]
-  
+
+ ttsort' :: Eq a => Revadlti a t -> Revadlti a t
+ ttsort' = unfoldr go where
+  go [] = Nothing
+  go (x@(v :<== _) : xs) =
+   Just (x, mergeRevadlt $ map (separateRevadlt v) $ splitRevadlt $ xs)
+
  -- | Tag the number of vertices referring to a vertex.
  tagLength :: Revadlet a t -> Revadleti a t
  tagLength (v :<== (rs, t)) = v :<== (rs, (t, length rs))
@@ -104,7 +110,7 @@ module Data.Graph.Sort where
    sp n (x : xs) = case n == co x of
     False -> ([], x : xs)
     True -> let (ys, zs) = sp n xs in (x : ys, zs)
-  
+
  -- | TODO
  separateRevadlt
   :: Eq a => a -> Revadlti a t -> (Revadlti a t, Revadlti a t)
