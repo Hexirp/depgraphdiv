@@ -23,7 +23,7 @@ script:
   - stack --no-terminal sdist
 
 before_cache:
-  - ls $HOME/.stack
+  - ls -R $HOME/.stack
 
 cache:
   directories:
