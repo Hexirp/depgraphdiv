@@ -1,7 +1,7 @@
 -- | Provide Topological sort.
 module Data.Graph.Sort where
  import Prelude
- import Data.List (sortOn, delete, unfoldr)
+ import Data.List (unfoldr)
 
  -- | 'Revadle' is a element of reversed adjacency list.
  -- It's composed of a vertex (top) and vertices referring to a top (references).
