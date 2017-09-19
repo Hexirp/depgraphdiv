@@ -131,20 +131,3 @@ module Data.Graph.Sort where
  untagLength :: Revadleti a t -> Revadlet a t
  untagLength (a :<== (rs, (t, _))) = a :<== (rs, t)
 
- -- | Sort a list of vertex in descending order of the number of vertices
- -- referenced.
- normalize :: Eq a => Revadlt a t -> Revadlt a t
- normalize = sortOn countRef
-
- -- | Count the number of vertices referring to a vertex.
- countRef :: Revadlet a t -> Int
- countRef (_ :<== (rs, _)) = length rs
-
- -- | Delete references from a vertex in a graph.
- deleteRef :: Eq a => a -> Revadlt a t -> Revadlt a t
- deleteRef x = mapRefs $ delete x
-
- -- | Map a function to a list of reference.
- mapRefs :: ([a] -> [a]) -> Revadlt a t -> Revadlt a t
- mapRefs = map . mapRevadlet where
-  mapRevadlet f (v :<== (r, t)) = v :<== (f r, t)
