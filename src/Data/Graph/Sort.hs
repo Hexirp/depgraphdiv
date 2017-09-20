@@ -94,15 +94,15 @@ module Data.Graph.Sort where
  ttsort' = unfoldr go where
   go [] = Nothing
   go (x@(v :<== _) : xs) =
-   Just (x, mergeRevadlt $ map (separateRevadlt v) $ splitRevadlt $ xs)
+   Just (x, mergeRevadlti $ map (separateRevadlti v) $ splitRevadlti $ xs)
 
  -- | Tag the number of vertices referring to a vertex.
  tagLength :: Revadlet a t -> Revadleti a t
  tagLength (v :<== (rs, t)) = v :<== (rs, (t, length rs))
 
  -- | Split 'Revadlt' by the number of references.
- splitRevadlt :: Revadlti a t -> [Revadlti a t]
- splitRevadlt = unfoldr go where
+ splitRevadlti :: Revadlti a t -> [Revadlti a t]
+ splitRevadlti = unfoldr go where
   go [] = Nothing
   go (x : xs) = let (ys, zs) = sp (co x) xs in Just (x : ys, zs) where
    co (_ :<== (_, (_, n))) = n
@@ -111,9 +111,9 @@ module Data.Graph.Sort where
     False -> ([], x : xs)
     True -> let (ys, zs) = sp n xs in (x : ys, zs)
 
- separateRevadlt
+ separateRevadlti
   :: Eq a => a -> Revadlti a t -> (Revadltid a t, Revadltid a t)
- separateRevadlt x = foldr go (id, id) where
+ separateRevadlti x = foldr go (id, id) where
   dr [] = ([], False)
   dr (y : ys) = case x == y of
    False -> let (ys', b) = dr ys in (y : ys', b)
@@ -123,9 +123,9 @@ module Data.Graph.Sort where
    True -> (bl v rs' t (i - 1) . ts, fs)
   bl v rs t i xs = (v :<== (rs, (t, i))) : xs
 
- mergeRevadlt
+ mergeRevadlti
   :: [(Revadltid a t, Revadltid a t)] -> Revadlti a t
- mergeRevadlt = foldr go [] where
+ mergeRevadlti = foldr go [] where
   go (ts, fs) xs = ts $ fs $ xs
 
  untagLength :: Revadleti a t -> Revadlet a t
