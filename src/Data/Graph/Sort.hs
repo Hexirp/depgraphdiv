@@ -114,14 +114,18 @@ module Data.Graph.Sort where
  separateRevadlti
   :: Eq a => a -> Revadlti a t -> (Revadltid a t, Revadltid a t)
  separateRevadlti x = foldr go (id, id) where
-  dr [] = ([], False)
-  dr (y : ys) = case x == y of
-   False -> let (ys', b) = dr ys in (y : ys', b)
-   True -> (ys, True)
-  go (v :<== (rs, (t, i))) (ts, fs) = let (rs', b) = dr rs in case b of
+  go (v :<== (rs, (t, i))) (ts, fs) = let (rs', b) = delem x rs in case b of
    False -> (ts, bl v rs' t i . fs)
    True -> (bl v rs' t (i - 1) . ts, fs)
   bl v rs t i xs = (v :<== (rs, (t, i))) : xs
+
+ -- | The fusion of 'delete' and 'elem' for a list without duplication.
+ delem :: Eq a => a -> [a] -> (a, Bool)
+ delem x = go where
+  go [] = ([], False)
+  go (y : ys) = case x == y of
+   False -> let (ys', b) = go ys in (y : ys', b)
+   True -> (ys, True)
 
  mergeRevadlti
   :: [(Revadltid a t, Revadltid a t)] -> Revadlti a t
