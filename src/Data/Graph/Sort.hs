@@ -120,7 +120,7 @@ module Data.Graph.Sort where
   bl v rs t i xs = (v :<== (rs, (t, i))) : xs
 
  -- | The fusion of 'delete' and 'elem' for a list without duplication.
- delem :: Eq a => a -> [a] -> (a, Bool)
+ delem :: Eq a => a -> [a] -> ([a], Bool)
  delem x = go where
   go [] = ([], False)
   go (y : ys) = case x == y of
