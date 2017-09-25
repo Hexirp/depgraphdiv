@@ -112,8 +112,8 @@ module Data.Graph.Sort where
     True -> let (ys, zs) = sp n xs in (x : ys, zs)
 
  separateRevadlti
-  :: Eq a => a -> Revadlti a t -> (Revadltid a t, Revadltid a t)
- separateRevadlti x = foldr go (id, id) where
+  :: Eq a => a -> Revadlti a t -> Revadltid a t
+ separateRevadlti x = uncurry (.) . foldr go (id, id) where
   go (v :<== (rs, (t, i))) (ts, fs) = delem x rs kf kt where
     uf rs' = v :<== (rs', (t, i))
     ut rs' = v :<== (rs', (t, i - 1))
@@ -129,9 +129,8 @@ module Data.Graph.Sort where
    True -> tk ys
 
  mergeRevadlti
-  :: [(Revadltid a t, Revadltid a t)] -> Revadlti a t
- mergeRevadlti = foldr go [] where
-  go (ts, fs) xs = ts $ fs $ xs
+  :: [Revadltid a t] -> Revadlti a t
+ mergeRevadlti = foldr ($) []
 
  untagLength :: Revadleti a t -> Revadlet a t
  untagLength (a :<== (rs, (t, _))) = a :<== (rs, t)
