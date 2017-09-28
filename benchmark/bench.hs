@@ -3,13 +3,13 @@
 import Criterion.Main
 import Control.DeepSeq
 
-import Data.Graph.Sort
+import Data.Graph.Sort(Revadlet(..), Revadlt, ttsort)
 
 instance (NFData v, NFData t) => NFData (Revadlet v t) where
  rnf (v :<== rt) = deepseq v (deepseq rt ())
 
 benchdata_full :: Int -> Revadlt Int ()
-benchdata_full = map el . flip take [0..] where
+benchdata_full n = map el $ take n [0..] where
  el n = n :<== (take n [0..], ())
 
 bench_full :: Int -> Revadlt Int ()
