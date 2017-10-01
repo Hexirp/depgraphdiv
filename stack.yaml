@@ -38,7 +38,7 @@ resolver: lts-9.6
 packages:
 - location: '.'
 - location:
-    git: git@github.com:Hexirp/doctest-driver-gen.git
+    git: https://github.com/Hexirp/doctest-driver-gen.git
     commit: a6f531272cc76f8fb96b8dc4705592db56cdd091
   extra-dep: true
 
