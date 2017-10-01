@@ -39,7 +39,7 @@ packages:
 - location: '.'
 - location:
     git: https://github.com/Hexirp/doctest-driver-gen.git
-    commit: 26a8e141f5b5f8759fd0e26877135035b86a3427
+    commit: cb0d7c75391614600ba5d5634a91cb17c9d24297
   extra-dep: true
 
 # Dependency packages to be pulled from upstream that are not in the resolver
