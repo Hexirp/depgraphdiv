@@ -39,7 +39,9 @@ packages:
 - '.'
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
-extra-deps: []
+extra-deps:
+- git: git@github.com:Hexirp/doctest-driver-gen.git
+  commit: a6f531272cc76f8fb96b8dc4705592db56cdd091
 
 # Override default flag values for local packages and extra-deps
 flags: {}
