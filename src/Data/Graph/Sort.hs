@@ -94,7 +94,7 @@ module Data.Graph.Sort where
  ttsort' = unfoldr go where
   go [] = Nothing
   go (x@(v :<== _) : xs) =
-   Just (x, mergeRevadlti $ splitRevadlti $ xs)
+   Just (x, mergeRevadlti $ map (separateRevadlti v) $ splitRevadlti $ xs)
 
  -- | Tag the number of vertices referring to a vertex.
  tagLength :: Revadlet a t -> Revadleti a t
@@ -111,6 +111,15 @@ module Data.Graph.Sort where
     False -> ([], x : xs)
     True -> let (ys, zs) = sp n xs in (x : ys, zs)
 
+ separateRevadlti
+  :: Eq a => a -> Revadlti a t -> Revadltid a t
+ separateRevadlti x = uncurry (.) . foldr go (id, id) where
+  go (v :<== (rs, (t, i))) (ts, fs) = delem x rs kf kt where
+    uf rs' = v :<== (rs', (t, i))
+    ut rs' = v :<== (rs', (t, i - 1))
+    kf rs' = (ts, (uf rs' :) . fs)
+    kt rs' = ((ut rs' :) . ts, fs)
+
  -- | The fusion of 'delete' and 'elem' for a list without duplication.
  delem :: Eq a => a -> [a] -> ([a] -> r) -> ([a] -> r) -> r
  delem x = go where
@@ -120,19 +129,8 @@ module Data.Graph.Sort where
    True -> tk ys
 
  mergeRevadlti
-  :: a -> [Revadlti a t] -> Revadlti a t
- mergeRevadlti x0 = foldr go [] where
-  go :: Revadlti a t -> Revadlti a t -> Revadlti a t
-  go x xs = uncurry ($) $ foldr go2 (id, xs) x
-  go2
-   :: Revadleti a t
-   -> (Revadltid a t, Revadlti a t)
-   -> (Revadltid a t, Revadlti a t)
-  go2 (v :<== (rs, (t, i))) (ts, fs) = delem x0 rs kf kt where
-   uf rs' = v :<== (rs', (t, i))
-   ut rs' = v :<== (rs', (t, i - 1))
-   kf rs' = (ts, uf rs' : fs)
-   kt rs' = ((ut rs' :) . ts, fs)
+  :: [Revadltid a t] -> Revadlti a t
+ mergeRevadlti = foldr ($) []
 
  untagLength :: Revadleti a t -> Revadlet a t
  untagLength (a :<== (rs, (t, _))) = a :<== (rs, t)
