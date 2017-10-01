@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
+import Prelude
 import Criterion.Main
 import Control.DeepSeq
 
@@ -9,7 +10,7 @@ instance (NFData v, NFData t) => NFData (Revadlet v t) where
  rnf (v :<== rt) = deepseq v (deepseq rt ())
 
 benchdata_full :: Int -> Revadlt Int ()
-benchdata_full n = map el $ take n [0..] where
+benchdata_full m = map el $ take m [0..] where
  el n = n :<== (take n [0..], ())
 
 bench_full :: Int -> Revadlt Int ()
