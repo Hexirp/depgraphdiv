@@ -1,7 +1,8 @@
 -- | Provide Topological sort.
 module Data.Graph.Sort where
  import Prelude
- import Data.List (unfoldr)
+ import Data.Function (on)
+ import Data.List (unfoldr, groupBy)
 
  -- | 'Revadle' is a element of reversed adjacency list.
  -- It's composed of a vertex (top) and vertices referring to a top (references).
@@ -102,14 +103,8 @@ module Data.Graph.Sort where
 
  -- | Split 'Revadlt' by the number of references.
  splitRevadlti :: Revadlti a t -> [Revadlti a t]
- splitRevadlti = unfoldr go where
-  go [] = Nothing
-  go (x : xs) = let (ys, zs) = sp (co x) xs in Just (x : ys, zs) where
+ splitRevadlti = groupBy $ on (==) co where
    co (_ :<== (_, (_, n))) = n
-   sp _ [] = ([], [])
-   sp n (x : xs) = case n == co x of
-    False -> ([], x : xs)
-    True -> let (ys, zs) = sp n xs in (x : ys, zs)
 
  separateRevadlti
   :: Eq a => a -> Revadlti a t -> Revadltid a t
