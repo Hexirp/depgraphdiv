@@ -88,8 +88,6 @@ module Data.Graph.Sort where
  type Revadleti v t = Revadlet v (t, Int)
 
  type Revadlti v t = [Revadleti v t]
- 
- type Revadltid v t = Revadlti v t -> Revadlti v t
 
  ttsort' :: Eq a => Revadlti a t -> Revadlti a t
  ttsort' = unfoldr go where
@@ -107,13 +105,13 @@ module Data.Graph.Sort where
    co (_ :<== (_, (_, n))) = n
 
  updateRevadlti
-  :: Eq a => a -> Revadlti a t -> Revadltid a t
- updateRevadlti x = uncurry (.) . foldr go (id, id) where
+  :: Eq a => a -> Revadlti a t -> (Revadlti a t, Revadlti a t)
+ updateRevadlti x = foldr go ([], []) where
   go (v :<== (rs, (t, i))) (ts, fs) = delem x rs kf kt where
    uf rs' = v :<== (rs', (t, i))
    ut rs' = v :<== (rs', (t, i - 1))
-   kf rs' = (ts, (uf rs' :) . fs)
-   kt rs' = ((ut rs' :) . ts, fs)
+   kf rs' = (ts, uf rs' : fs)
+   kt rs' = (ut rs' : ts, fs)
 
  -- | The fusion of 'delete' and 'elem' for a list without duplication.
  delem :: Eq a => a -> [a] -> ([a] -> r) -> ([a] -> r) -> r
@@ -124,8 +122,8 @@ module Data.Graph.Sort where
    True -> tk ys
 
  mergeRevadlti
-  :: [Revadltid a t] -> Revadlti a t
- mergeRevadlti = foldr ($) []
+  :: [(Revadlti a t, Revadlti a t)] -> Revadlti a t
+ mergeRevadlti = foldr (\(ts, fs) x -> ts ++ fs ++ x) []
 
  untagLength :: Revadleti a t -> Revadlet a t
  untagLength (a :<== (rs, (t, _))) = a :<== (rs, t)
