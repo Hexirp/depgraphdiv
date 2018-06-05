@@ -1,6 +1,10 @@
 module Main where
+ import Prelude
+ import Data.IORef
 
-import Lib
+ main :: IO ()
+ main = return ()
 
-main :: IO ()
-main = someFunc
+ newtype Node = Node (IORef [Node])
+
+ newtype Graph = IORef Node
