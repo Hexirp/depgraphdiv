@@ -8,6 +8,10 @@ module Main where
  -- | 複数の物を参照する物。
  newtype Node = Node (IORef (Set Node))
 
+ -- | 浅い同値。
+ instance Eq Node where
+  Node a == Node b = a == b
+
  -- | ある一塊になった参照しあう複数の物。
  --
  -- 一塊になっているということは、参照を辿っていって到達できるすべての物が
