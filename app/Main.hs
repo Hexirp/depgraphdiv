@@ -5,6 +5,7 @@ module Main where
  main :: IO ()
  main = return ()
 
+ -- | 複数の物を参照する物。
  newtype Node = Node (IORef (Set Node))
 
  -- | ある一塊になった参照しあう複数の物。
