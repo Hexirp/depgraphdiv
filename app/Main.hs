@@ -16,17 +16,16 @@ module Main where
  landscape :: Node -> IO (Set Node)
  landscape a = landscapeCum a []
 
+ landscapes :: Set Node -> IO (Set Node)
+ landscapes x = landscapesCum x []
+
  landscapeCum :: Node -> Set Node -> IO (Set Node)
- landscapeCum a cum = do
-  refs <- references a
-  case refs of
-   []     ->
-    return cum
-   (x:xs) -> do
-    cums <- landscapesCum xs cum
-    case contain x cums of
-     False -> landscapeCum x (x : cums)
-     True  -> return cums
+ landscapeCum a cum =
+  case contain a cum of
+   False -> do
+    refs <- references a
+    landscapesCum refs (a : cum)
+   True -> return cum
  
  landscapesCum :: Set Node -> Set Node -> IO (Set Node)
  landscapesCum []     cum = return cum
