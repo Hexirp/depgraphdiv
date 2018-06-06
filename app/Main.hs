@@ -5,9 +5,13 @@ module Main where
  main :: IO ()
  main = return ()
 
- newtype Node = Node (IORef [Node])
+ newtype Node = Node (IORef (Set Node))
 
- newtype Graph = IORef Node
+ -- | ある一塊になった参照しあう複数の物。
+ --
+ -- 一塊になっているということは、参照を辿っていって到達できるすべての物が
+ -- 元々の塊に含まれていることである。
+ newtype Graph = Graph (Set Node)
 
  -- | 複数の物を入れることが出来て、重複を持たない入れ物。
  --
