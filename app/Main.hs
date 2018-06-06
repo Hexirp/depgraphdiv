@@ -1,3 +1,5 @@
+{-# LANGUAGE LambdaCase #-}
+
 module Main where
  import Prelude
  import Data.IORef
@@ -6,11 +8,33 @@ module Main where
  main = return ()
 
  -- | 複数の物を参照する物。
- newtype Node = Node (IORef (Set Node))
+ newtype Node = Node { unNode :: IORef (Set Node)}
+
+ references :: Node -> IO (Set Node)
+ references = readIORef (unNode a)
+
+ landscape :: Node -> IO (Set Node)
+ landscape a = landscapeCum a []
+
+ landscapeCum :: Node -> Set Node -> IO (Set Node)
+ landscapeCum a cum = do
+  refs <- references a
+  case refs of
+   []     ->
+    return cum
+   (x:xs) -> do
+    cums <- landscapesCum xs cum
+    case contain x cums of
+     False -> landscapeCum x (x : cums)
+     True  -> return cums
+ 
+ landscapesCum :: Set Node -> Set Node -> IO (Set Node)
+ landscapesCum []     cum = return cum
+ landscapesCum (x:xs) cum = landscapeCum x (landscapesCum xs cum)
 
  -- | 浅い同値。
  instance Eq Node where
-  Node a == Node b = a == b
+  a == b = unNode a == unNode a
 
  -- | ある一塊になった参照しあう複数の物。
  --
