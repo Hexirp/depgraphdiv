@@ -47,7 +47,7 @@ module Main where
   case contain a cum of
    False -> do
     refs <- references a
-    landscapesCum refs (a : cum)
+    landscapesCum refs (a : cum) -- @a@ は @cum@ に含まれないことが分かっている
    True -> return cum
  
  -- | ある 'Node' 群から参照を辿って行って到達できる 'Node' の集合を
