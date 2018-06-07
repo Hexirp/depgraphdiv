@@ -11,7 +11,7 @@ module Main where
  newtype Node = Node { unNode :: IORef (Set Node)}
 
  references :: Node -> IO (Set Node)
- references = readIORef (unNode a)
+ references a = readIORef (unNode a)
 
  landscape :: Node -> IO (Set Node)
  landscape a = landscapeCum a []
@@ -29,7 +29,7 @@ module Main where
  
  landscapesCum :: Set Node -> Set Node -> IO (Set Node)
  landscapesCum []     cum = return cum
- landscapesCum (x:xs) cum = landscapeCum x (landscapesCum xs cum)
+ landscapesCum (x:xs) cum = landscapeCum x =<< landscapesCum xs cum
 
  -- | 浅い同値。
  instance Eq Node where
