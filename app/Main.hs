@@ -83,3 +83,29 @@ module Main where
  overlapped :: Eq a => [a] -> Bool
  overlapped []     = False
  overlapped (x:xs) = contain x xs || overlapped xs
+
+ add :: Eq a => a -> Set a -> Set a
+ add a = go
+  where
+   go []     = a : []
+   go (x:xs) = case a == x of
+    False -> x : go xs
+    True  => x : xs
+
+ remove :: Eq a => a -> Set a -> Set a
+ remove a = go
+  where
+   go []     = []
+   go (x:xs) = case a == x of
+    False -> x : go xs
+    True  -> xs
+
+ removes :: Eq a => Set a -> Set a -> Set a
+ removes []     y = y
+ removes (x:xs) y = remove x (removes xs y)
+
+ sub :: Eq a => Set a -> Set a -> Bool
+ sub x y = removes x y == []
+
+ eq :: Eq a => Set a -> Set a -> Bool
+ eq x y = sub x y && sub y x
