@@ -47,7 +47,7 @@ module Main where
   case contain a cum of
    False -> do
     refs <- references a
-    landscapesCum refs (a : cum) -- @a@ は @cum@ に含まれないことが分かっている
+    landscapesCum refs (a : cum) -- @a@ は @cum@ に含まれない
    True -> return cum
  
  -- | ある 'Node' 群から参照を辿って行って到達できる 'Node' の集合を
@@ -64,12 +64,21 @@ module Main where
  --
  -- 一塊になっているということは、参照を辿っていって到達できるすべての物が
  -- 元々の塊に含まれていることである。
- newtype Graph = Graph (Set Node)
+ --
+ -- 即ち、任意の値 @x : Graph@ に対して以下が常に成り立つ。
+ --
+ -- > closed x
+ newtype Graph = Graph { unGraph :: Set Node }
+
+ closed :: Graph -> Bool
+ closed = f . unGraph
+  where
+   f a = a `eq` landscapes a
 
  -- | 複数の物を入れることが出来て、順序と重複を持たない入れ物。
  --
  -- 任意の型 @a : Type@ と実装 @_ : Eq a@ と値 @x : Set a@ に対して
- -- 以下の等式が常に成り立つ。
+ -- 以下が常に成り立つ。
  --
  -- > overlapped x = False
  type Set a = [a]
