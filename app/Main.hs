@@ -99,7 +99,7 @@ module Main where
    go []     = a : []
    go (x:xs) = case a == x of
     False -> x : go xs
-    True  => x : xs
+    True  -> x : xs
 
  remove :: Eq a => a -> Set a -> Set a
  remove a = go
