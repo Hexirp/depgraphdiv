@@ -2,6 +2,7 @@
 
 module Main where
  import Prelude
+ import Control.Monad
  import Data.IORef
 
  main :: IO ()
@@ -54,7 +55,7 @@ module Main where
  -- 与えられた集合に積み重ねた集合。
  landscapesCum :: Set Node -> Set Node -> IO (Set Node)
  landscapesCum []     cum = return cum
- landscapesCum (x:xs) cum = landscapeCum x =<< landscapesCum xs cum
+ landscapesCum (x:xs) cum = join $ landscapeCum x <$> landscapesCum xs cum
 
  -- | 浅い同値。
  instance Eq Node where
