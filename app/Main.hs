@@ -8,7 +8,7 @@ module Main where
  main = return ()
 
  -- | 複数の物を参照する物。
- newtype Node = Node { unNode :: IORef (Set Node)}
+ newtype Node = Node { unNode :: IORef (Set Node) }
 
  -- | ある 'Node' が参照する 'Node' の集合。
  references :: Node -> IO (Set Node)
@@ -67,7 +67,7 @@ module Main where
  --
  -- 即ち、任意の値 @x : Graph@ に対して以下が常に成り立つ。
  --
- -- > closed x
+ -- > closed x = True
  newtype Graph = Graph { unGraph :: Set Node }
 
  closed :: Graph -> Bool
