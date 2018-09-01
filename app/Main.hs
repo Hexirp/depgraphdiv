@@ -76,6 +76,16 @@ module Main where
   where
    f a = a `eq` landscapes a
 
+ hasLoop :: Graph -> IO Bool
+ hasLoop x = f (unGraph x) []
+  where
+   f :: Set Node -> Set Node -> IO Bool
+   f []       cum = return False
+   f (x : xs) cum =
+
+   g :: Node -> Set Node -> IO Bool
+   g
+
  -- | 複数の物を入れることが出来て、順序と重複を持たない入れ物。
  --
  -- 任意の型 @a : Type@ と実装 @_ : Eq a@ と値 @x : Set a@ に対して
