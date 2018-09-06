@@ -77,19 +77,19 @@ module Main where
    f a = eq a <$> landscapes a
 
  hasLoop :: Graph -> IO Bool
- hasLoop x = f (unGraph x) []
+ hasLoop x = (\(a, _) -> a) <$> f (unGraph x) []
   where
-   f :: Set Node -> Set Node -> IO Bool
-   f []     cum = return False
-   f (x:xs) cum = (||) <$> (join $ g x <$> landscapesCum xs cum) <*> f xs cum
+   f :: Set Node -> Set Node -> IO (Bool, Set Node)
+   f []     cum = return (False, cum)
+   f (x:xs) cum = join $ (\(xp, cum') -> (||) <$> g x cum' <*> return xp) <$> f xs cum
 
-   g :: Node -> Set Node -> IO Bool
+   g :: Node -> Set Node -> IO (Bool, Set Node)
    g a cum =
     case contain a cum of
      False -> do
       refs <- references a
       f refs (a : cum)
-     True -> return True
+     True -> return (True, cum)
 
  -- | 複数の物を入れることが出来て、順序と重複を持たない入れ物。
  --
