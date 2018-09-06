@@ -81,7 +81,7 @@ module Main where
   where
    f :: Set Node -> Set Node -> IO (Bool, Set Node)
    f []     cum = return (False, cum)
-   f (x:xs) cum = join $ (\(xp, cum') -> (||) <$> g x cum' <*> return xp) <$> f xs cum
+   f (x:xs) cum = join $ (\(xp, cum') -> (\(xpp, cum'') -> (xpp || xp, cum'')) <$> g x cum') <$> f xs cum
 
    g :: Node -> Set Node -> IO (Bool, Set Node)
    g a cum =
