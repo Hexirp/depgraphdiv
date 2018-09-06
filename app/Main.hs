@@ -68,13 +68,13 @@ module Main where
  --
  -- 即ち、任意の値 @x : Graph@ に対して以下が常に成り立つ。
  --
- -- > closed x = True
+ -- > closed x = return True
  newtype Graph = Graph { unGraph :: Set Node }
 
- closed :: Graph -> Bool
+ closed :: Graph -> IO Bool
  closed = f . unGraph
   where
-   f a = a `eq` landscapes a
+   f a = eq a <$> landscapes a
 
  hasLoop :: Graph -> IO Bool
  hasLoop x = f (unGraph x) []
